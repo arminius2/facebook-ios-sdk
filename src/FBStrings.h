@@ -6,56 +6,57 @@
 //  Copyright (c) 2012 Alex C. Schaefer -- All rights reserved.
 //
 
-static NSString * const kFBCookieStorageURLStringKey;
 
-static NSString * const kDialogBaseURL;
-static NSString * const kGraphBaseURL;
-static NSString * const kRestserverBaseURL;
+static NSString * const kFBCookieStorageURLStringKey = @"http://login.facebook.com";
 
-static NSString * const kFBAppAuthURLScheme;
-static NSString * const kFBAppAuthURLSchemeVersion;
+static NSString * const kDialogBaseURL = @"https://m.facebook.com/dialog/";
+static NSString * const kGraphBaseURL = @"https://graph.facebook.com/";
+static NSString * const kRestserverBaseURL = @"https://api.facebook.com/method/";
 
-static NSString * const kFBAppAuthURLPath;
-static NSString * const kRedirectURL;
+static NSString * const kFBAppAuthURLScheme = @"fbauth";
+static NSString * const kFBAppAuthURLSchemeVersion = @"2";
 
-static NSString * const kLogin;
-static NSString * const kApprequests;
-static NSString * const kSDK;
-static NSString * const kSDKVersion;
+static NSString * const kFBAppAuthURLPath = @"authorize";
+static NSString * const kRedirectURL = @"fbconnect://success";
+
+static NSString * const kLogin = @"oauth";
+static NSString * const kApprequests = @"apprequests";
+static NSString * const kSDK = @"ios";
+static NSString * const kSDKVersion = @"2";
 
 
-static NSString * const kFBClientIdKey;
-static NSString * const kFBTypeKey;
-static NSString * const kFBRedirectURIKey;
-static NSString * const kFBDisplayKey;
-static NSString * const kFBSDKKey;
-static NSString * const kFBSDKVersionKey;
-static NSString * const kFBLocalClientIdKey;
-static NSString * const kFBScopeKey;
-static NSString * const kFBOAuth2ExpiresKey;
-static NSString * const kFBSDKResponseFormatKey;
-static NSString * const kFBSDKAPIKey;
-static NSString * const kFBDialogFrictionlessRequestsEnabledKey;
-static NSString * const kFBDialogFrictionlessRecipientsKey;
-static NSString * const kFBRequestMethodKey;
-static NSString * const kFBRecipientsInvisibleKey;
+static NSString * const kFBClientIdKey = @"client_id";
+static NSString * const kFBTypeKey = @"type";
+static NSString * const kFBRedirectURIKey = @"redirect_uri";
+static NSString * const kFBDisplayKey = @"display";
+static NSString * const kFBSDKKey = @"sdk";
+static NSString * const kFBSDKVersionKey = @"sdk_version";
+static NSString * const kFBLocalClientIdKey = @"local_client_id";
+static NSString * const kFBScopeKey = @"scope";
+static NSString * const kFBOAuth2ExpiresKey = @"expires_at";
+static NSString * const kFBSDKResponseFormatKey = @"format";
+static NSString * const kFBSDKAPIKey = @"app_id";
+static NSString * const kFBDialogFrictionlessRequestsEnabledKey = @"frictionless";
+static NSString * const kFBDialogFrictionlessRecipientsKey = @"get_frictionless_recipients";
+static NSString * const kFBRequestMethodKey = @"method";
+static NSString * const kFBRecipientsInvisibleKey = @"to";
 
-static NSString * const kFBOAuth2Key;
-static NSString * const kFBOAuthErrorKey;
-static NSString * const kFBOAuthErrorCodeKey;
-static NSString * const kFBOAuthTokenExpiresInKey;
+static NSString * const kFBOAuth2Key = @"access_token";
+static NSString * const kFBOAuthErrorKey = @"error";
+static NSString * const kFBOAuthErrorCodeKey = @"error_code";
+static NSString * const kFBOAuthTokenExpiresInKey = @"expires_in";
 
-static NSString * const kFBJSONErrorKey;
-static NSString * const kFBJSONErrorCodeKey;
-static NSString * const kFBJSONErrorMessageKey;
-static NSString * const kFBJSONErrorReasonKey;
+static NSString * const kFBJSONErrorKey = @"error";
+static NSString * const kFBJSONErrorCodeKey = @"error_code";
+static NSString * const kFBJSONErrorMessageKey = @"error_msg";
+static NSString * const kFBJSONErrorReasonKey = @"error_reason";
 
-static NSString * const kFBErrorDomain;
+static NSString * const kFBErrorDomain = @"facebookErrDomain";
 
-static NSString * const kFBOAuthErrorServiceDisabledUseBrowser;
-static NSString * const kFBOAuthErrorServiceDisabledKey;
-static NSString * const kFBOAuthErrorAccessDenied;
+static NSString * const kFBOAuthErrorServiceDisabledUseBrowser = @"service_disabled_use_browser";
+static NSString * const kFBOAuthErrorServiceDisabledKey = @"service_disabled";
+static NSString * const kFBOAuthErrorAccessDenied = @"access_denied";
 
-static NSString * const kFBSDKResponseFormatJSON;
-static NSString * const kFBDisplayTypeValue;
-static NSString * const kFBUserAgent;
+static NSString * const kFBSDKResponseFormatJSON = @"json";
+static NSString * const kFBDisplayTypeValue = @"touch";
+static NSString * const kFBUserAgent = @"user_agent";

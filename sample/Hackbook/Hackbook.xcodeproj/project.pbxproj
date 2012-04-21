@@ -27,8 +27,25 @@
 		30EA73FC13F5D590003DC0D2 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30EA73FB13F5D590003DC0D2 /* CoreLocation.framework */; };
 		30ED588C14358F8A00A226C3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 30ED588B14358F8A00A226C3 /* Default@2x.png */; };
 		30ED588F14358F9400A226C3 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 30ED588E14358F9400A226C3 /* Icon@2x.png */; };
-		C1D4C88315434F5A0000CD56 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D4C88215434F5A0000CD56 /* libfacebook_ios_sdk.a */; };
+		C1D4C933154351DD0000CD56 /* libfacebook_ios_sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1D4C9301543519A0000CD56 /* libfacebook_ios_sdk.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C1D4C92F1543519A0000CD56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1D4C9281543519A0000CD56 /* facebook-ios-sdk.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = "facebook-ios-sdk";
+		};
+		C1D4C931154351DA0000CD56 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C1D4C9281543519A0000CD56 /* facebook-ios-sdk.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = "facebook-ios-sdk";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		3018B43913F9B94D00F61944 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = "iPad/en.lproj/MainWindow-iPad.xib"; sourceTree = "<group>"; };
@@ -59,8 +76,7 @@
 		30EA73FB13F5D590003DC0D2 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		30ED588B14358F8A00A226C3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		30ED588E14358F9400A226C3 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
-		C1D4C87315434DF50000CD56 /* facebook-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "facebook-ios-sdk.xcodeproj"; path = "../../src/facebook-ios-sdk.xcodeproj"; sourceTree = SOURCE_ROOT; };
-		C1D4C88215434F5A0000CD56 /* libfacebook_ios_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libfacebook_ios_sdk.a; path = "../../src/build/Release-iphoneos/libfacebook_ios_sdk.a"; sourceTree = "<group>"; };
+		C1D4C9281543519A0000CD56 /* facebook-ios-sdk.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "facebook-ios-sdk.xcodeproj"; path = "../../src/facebook-ios-sdk.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C1D4C88315434F5A0000CD56 /* libfacebook_ios_sdk.a in Frameworks */,
+				C1D4C933154351DD0000CD56 /* libfacebook_ios_sdk.a in Frameworks */,
 				30EA73FC13F5D590003DC0D2 /* CoreLocation.framework in Frameworks */,
 				30EA735E13F5D21B003DC0D2 /* UIKit.framework in Frameworks */,
 				30EA736013F5D21B003DC0D2 /* Foundation.framework in Frameworks */,
@@ -90,6 +106,7 @@
 		30EA734E13F5D21B003DC0D2 = {
 			isa = PBXGroup;
 			children = (
+				C1D4C9281543519A0000CD56 /* facebook-ios-sdk.xcodeproj */,
 				30EA73CA13F5D502003DC0D2 /* FBConnect.bundle */,
 				30EA736313F5D21B003DC0D2 /* Hackbook */,
 				30EA735C13F5D21B003DC0D2 /* Frameworks */,
@@ -108,8 +125,6 @@
 		30EA735C13F5D21B003DC0D2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				C1D4C88215434F5A0000CD56 /* libfacebook_ios_sdk.a */,
-				C1D4C87315434DF50000CD56 /* facebook-ios-sdk.xcodeproj */,
 				30EA73FB13F5D590003DC0D2 /* CoreLocation.framework */,
 				30EA735D13F5D21B003DC0D2 /* UIKit.framework */,
 				30EA735F13F5D21B003DC0D2 /* Foundation.framework */,
@@ -155,6 +170,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		C1D4C9291543519A0000CD56 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C1D4C9301543519A0000CD56 /* libfacebook_ios_sdk.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -169,6 +192,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C1D4C932154351DA0000CD56 /* PBXTargetDependency */,
 			);
 			name = Hackbook;
 			productName = Hackbook;
@@ -193,12 +217,28 @@
 			mainGroup = 30EA734E13F5D21B003DC0D2;
 			productRefGroup = 30EA735A13F5D21B003DC0D2 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = C1D4C9291543519A0000CD56 /* Products */;
+					ProjectRef = C1D4C9281543519A0000CD56 /* facebook-ios-sdk.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				30EA735813F5D21B003DC0D2 /* Hackbook */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		C1D4C9301543519A0000CD56 /* libfacebook_ios_sdk.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libfacebook_ios_sdk.a;
+			remoteRef = C1D4C92F1543519A0000CD56 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		30EA735713F5D21B003DC0D2 /* Resources */ = {
@@ -235,6 +275,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C1D4C932154351DA0000CD56 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "facebook-ios-sdk";
+			targetProxy = C1D4C931154351DA0000CD56 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		3018B43813F9B94D00F61944 /* MainWindow-iPad.xib */ = {

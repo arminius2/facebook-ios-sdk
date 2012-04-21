@@ -33,7 +33,6 @@
 		AEA93B2B11D52959000A4545 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA93B1E11D52959000A4545 /* SBJsonParser.m */; };
 		AEA93B2C11D52959000A4545 /* SBJsonWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = AEA93B1F11D52959000A4545 /* SBJsonWriter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AEA93B2D11D52959000A4545 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = AEA93B2011D52959000A4545 /* SBJsonWriter.m */; };
-		C1D4C8671543497F0000CD56 /* FBStrings.m in Sources */ = {isa = PBXBuildFile; fileRef = C1D4C8661543497F0000CD56 /* FBStrings.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,7 +64,6 @@
 		AEA93B1F11D52959000A4545 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		AEA93B2011D52959000A4545 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		C1D4C8641543482F0000CD56 /* FBStrings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FBStrings.h; sourceTree = "<group>"; };
-		C1D4C8661543497F0000CD56 /* FBStrings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FBStrings.m; sourceTree = "<group>"; };
 		D2AAC07E0554694100DB518D /* libfacebook_ios_sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfacebook_ios_sdk.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -132,7 +130,6 @@
 			isa = PBXGroup;
 			children = (
 				C1D4C8641543482F0000CD56 /* FBStrings.h */,
-				C1D4C8661543497F0000CD56 /* FBStrings.m */,
 				AA747D9E0F9514B9006C5449 /* facebook_ios_sdk_Prefix.pch */,
 			);
 			name = "Other Sources";
@@ -243,7 +240,6 @@
 				AEA93B2B11D52959000A4545 /* SBJsonParser.m in Sources */,
 				AEA93B2D11D52959000A4545 /* SBJsonWriter.m in Sources */,
 				22297EB214FC1413003CE798 /* FBFrictionlessRequestSettings.m in Sources */,
-				C1D4C8671543497F0000CD56 /* FBStrings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

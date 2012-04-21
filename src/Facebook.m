@@ -20,18 +20,6 @@
 #import "FBRequest.h"
 #import "JSON.h"
 
-static NSString* kDialogBaseURL = @"https://m.facebook.com/dialog/";
-static NSString* kGraphBaseURL = @"https://graph.facebook.com/";
-static NSString* kRestserverBaseURL = @"https://api.facebook.com/method/";
-
-static NSString* kFBAppAuthURLScheme = @"fbauth";
-static NSString* kFBAppAuthURLPath = @"authorize";
-static NSString* kRedirectURL = @"fbconnect://success";
-
-static NSString* kLogin = @"oauth";
-static NSString* kApprequests = @"apprequests";
-static NSString* kSDK = @"ios";
-static NSString* kSDKVersion = @"2";
 
 // If the last time we extended the access token was more than 24 hours ago
 // we try to refresh the access token again.
@@ -135,13 +123,15 @@ static void *finishedContext = @"finishedContext";
     [super dealloc];
 }
 
+
+
 - (void)invalidateSession {
     self.accessToken = nil;
     self.expirationDate = nil;
     
     NSHTTPCookieStorage* cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     NSArray* facebookCookies = [cookies cookiesForURL:
-                                [NSURL URLWithString:@"http://login.facebook.com"]];
+                                [NSURL URLWithString:kFBCookieStorageURLStringKey]];
     
     for (NSHTTPCookie* cookie in facebookCookies) {
         [cookies deleteCookie:cookie];
@@ -169,11 +159,11 @@ static void *finishedContext = @"finishedContext";
            httpMethod:(NSString *)httpMethod
              delegate:(id<FBRequestDelegate>)delegate {
     
-    [params setValue:@"json" forKey:@"format"];
-    [params setValue:kSDK forKey:@"sdk"];
-    [params setValue:kSDKVersion forKey:@"sdk_version"];
+    [params setValue:kFBSDKResponseFormatJSON forKey:kFBSDKResponseFormatKey];
+    [params setValue:kSDK forKey:kFBSDKKey];
+    [params setValue:kSDKVersion forKey:kFBSDKVersionKey];
     if ([self isSessionValid]) {
-        [params setValue:self.accessToken forKey:@"access_token"];
+        [params setValue:self.accessToken forKey:kFBOAuth2Key];
     }
     
     [self extendAccessTokenIfNeeded];
@@ -192,7 +182,7 @@ static void *finishedContext = @"finishedContext";
     if (context == finishedContext) {
         FBRequest* _request = (FBRequest*)object;
         FBRequestState requestState = [_request state];
-        if (requestState == kFBRequestStateComplete) {
+        if (kFBRequestStateComplete == requestState) {
             if ([_request sessionDidExpire]) {
                 [self invalidateSession];
                 if ([self.sessionDelegate respondsToSelector:@selector(fbSessionInvalidated)]) {
@@ -214,28 +204,30 @@ static void *finishedContext = @"finishedContext";
             _urlSchemeSuffix ? _urlSchemeSuffix : @""];
 }
 
+
+
 /**
  * A private function for opening the authorization dialog.
  */
 - (void)authorizeWithFBAppAuth:(BOOL)tryFBAppAuth
                     safariAuth:(BOOL)trySafariAuth {
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   _appId, @"client_id",
-                                   @"user_agent", @"type",
-                                   kRedirectURL, @"redirect_uri",
-                                   @"touch", @"display",
-                                   kSDK, @"sdk",
+                                   _appId, kFBClientIdKey,
+                                   kFBUserAgent, kFBTypeKey,
+                                   kRedirectURL, kFBRedirectURIKey,
+                                   kFBDisplayTypeValue, kFBDisplayKey,
+                                   kSDK, kFBSDKKey,
                                    nil];
     
     NSString *loginDialogURL = [kDialogBaseURL stringByAppendingString:kLogin];
     
     if (_permissions != nil) {
         NSString* scope = [_permissions componentsJoinedByString:@","];
-        [params setValue:scope forKey:@"scope"];
+        [params setValue:scope forKey:kFBScopeKey];
     }
     
     if (_urlSchemeSuffix) {
-        [params setValue:_urlSchemeSuffix forKey:@"local_client_id"];
+        [params setValue:_urlSchemeSuffix forKey:kFBLocalClientIdKey];
     }
     
     // If the device is running a version of iOS that supports multitasking,
@@ -251,7 +243,7 @@ static void *finishedContext = @"finishedContext";
         if (tryFBAppAuth) {
             NSString *scheme = kFBAppAuthURLScheme;
             if (_urlSchemeSuffix) {
-                scheme = [scheme stringByAppendingString:@"2"];
+                scheme = [scheme stringByAppendingString:kSDKVersion]; //XXX:  @"2" was here, and from what I can read this seems to all match up.  
             }
             NSString *urlPrefix = [NSString stringWithFormat:@"%@://%@", scheme, kFBAppAuthURLPath];
             NSString *fbAppUrl = [FBRequest serializeURL:urlPrefix params:params];
@@ -260,7 +252,7 @@ static void *finishedContext = @"finishedContext";
         
         if (trySafariAuth && !didOpenOtherApp) {
             NSString *nextUrl = [self getOwnBaseUrl];
-            [params setValue:nextUrl forKey:@"redirect_uri"];
+            [params setValue:nextUrl forKey:kFBRedirectURIKey];
             
             NSString *fbAppUrl = [FBRequest serializeURL:loginDialogURL params:params];
             didOpenOtherApp = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:fbAppUrl]];
@@ -283,14 +275,16 @@ static void *finishedContext = @"finishedContext";
  */
 - (NSDictionary*)parseURLParams:(NSString *)query {
 	NSArray *pairs = [query componentsSeparatedByString:@"&"];
-	NSMutableDictionary *params = [[[NSMutableDictionary alloc] init] autorelease];
+	NSMutableDictionary *params = [NSMutableDictionary dictionary];
 	for (NSString *pair in pairs) {
 		NSArray *kv = [pair componentsSeparatedByString:@"="];
-		NSString *val =
-    [[kv objectAtIndex:1]
-     stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        if ([kv count] < 2) { //Watch out for improperly formatted requests...
+            continue;
+        }
+        NSString *key = [kv objectAtIndex:0];
+		NSString *val = [[kv objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
-		[params setObject:val forKey:[kv objectAtIndex:0]];
+		[params setObject:val forKey:key];
 	}
   return params;
 }
@@ -352,7 +346,7 @@ static void *finishedContext = @"finishedContext";
     }
     _isExtendingAccessToken = YES;
     NSMutableDictionary* params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
-                                   @"auth.extendSSOAccessToken", @"method",
+                                   @"auth.extendSSOAccessToken", kFBRequestMethodKey,
                                    nil];
     _requestExtendingAccessToken = [self requestWithParams:params andDelegate:self];
 }
@@ -418,22 +412,22 @@ static void *finishedContext = @"finishedContext";
     }
     
     NSDictionary *params = [self parseURLParams:query];
-    NSString *accessToken = [params objectForKey:@"access_token"];
+    NSString *accessToken = [params objectForKey:kFBOAuth2Key];
     
     // If the URL doesn't contain the access token, an error has occurred.
     if (!accessToken) {
-        NSString *errorReason = [params objectForKey:@"error"];
+        NSString *errorReason = [params objectForKey:kFBOAuthErrorKey];
         
         // If the error response indicates that we should try again using Safari, open
         // the authorization dialog in Safari.
-        if (errorReason && [errorReason isEqualToString:@"service_disabled_use_browser"]) {
+        if (errorReason && [errorReason isEqualToString:kFBOAuthErrorServiceDisabledUseBrowser]) {
             [self authorizeWithFBAppAuth:NO safariAuth:YES];
             return YES;
         }
         
         // If the error response indicates that we should try the authorization flow
         // in an inline dialog, do that.
-        if (errorReason && [errorReason isEqualToString:@"service_disabled"]) {
+        if (errorReason && [errorReason isEqualToString:kFBOAuthErrorServiceDisabledKey]) {
             [self authorizeWithFBAppAuth:NO safariAuth:NO];
             return YES;
         }
@@ -441,16 +435,16 @@ static void *finishedContext = @"finishedContext";
         // The facebook app may return an error_code parameter in case it
         // encounters a UIWebViewDelegate error. This should not be treated
         // as a cancel.
-        NSString *errorCode = [params objectForKey:@"error_code"];
+        NSString *errorCode = [params objectForKey:kFBOAuthErrorCodeKey];
         
         BOOL userDidCancel =
-        !errorCode && (!errorReason || [errorReason isEqualToString:@"access_denied"]);
+        !errorCode && (!errorReason || [errorReason isEqualToString:kFBOAuthErrorAccessDenied]);
         [self fbDialogNotLogin:userDidCancel];
         return YES;
     }
     
     // We have an access token, so parse the expiration date.
-    NSString *expTime = [params objectForKey:@"expires_in"];
+    NSString *expTime = [params objectForKey:kFBOAuthTokenExpiresInKey];
     NSDate *expirationDate = [NSDate distantFuture];
     if (expTime != nil) {
         int expVal = [expTime intValue];
@@ -514,13 +508,13 @@ static void *finishedContext = @"finishedContext";
  */
 - (FBRequest*)requestWithParams:(NSMutableDictionary *)params
                     andDelegate:(id <FBRequestDelegate>)delegate {
-    if ([params objectForKey:@"method"] == nil) {
+    if ([params objectForKey:kFBRequestMethodKey] == nil) {
         NSLog(@"API Method must be specified");
         return nil;
     }
     
-    NSString * methodName = [params objectForKey:@"method"];
-    [params removeObjectForKey:@"method"];
+    NSString * methodName = [params objectForKey:kFBRequestMethodKey];
+    [params removeObjectForKey:kFBRequestMethodKey];
     
     return [self requestWithMethodName:methodName
                              andParams:params
@@ -693,18 +687,18 @@ static void *finishedContext = @"finishedContext";
     [_fbDialog release];
     
     NSString *dialogURL = [kDialogBaseURL stringByAppendingString:action];
-    [params setObject:@"touch" forKey:@"display"];
-    [params setObject:kSDKVersion forKey:@"sdk"];
-    [params setObject:kRedirectURL forKey:@"redirect_uri"];
+    [params setObject:kFBDisplayTypeValue forKey:kFBDisplayKey];
+    [params setObject:kSDKVersion forKey:kFBSDKKey];
+    [params setObject:kRedirectURL forKey:kFBRedirectURIKey];
     
     if (action == kLogin) {
-        [params setObject:@"user_agent" forKey:@"type"];
+        [params setObject:kFBUserAgent forKey:kFBTypeKey];
         _fbDialog = [[FBLoginDialog alloc] initWithURL:dialogURL loginParams:params delegate:self];
     } else {
-        [params setObject:_appId forKey:@"app_id"];
+        [params setObject:_appId forKey:kFBSDKAPIKey];
         if ([self isSessionValid]) {
             [params setValue:[self.accessToken stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
-                      forKey:@"access_token"];
+                      forKey:kFBOAuth2Key];
             [self extendAccessTokenIfNeeded];
         }
         
@@ -717,13 +711,13 @@ static void *finishedContext = @"finishedContext";
             if (self.isFrictionlessRequestsEnabled) {
                 //  1. show the "Don't show this again for these friends" checkbox
                 //  2. if the developer is sending a targeted request, then skip the loading screen
-                [params setValue:@"1" forKey:@"frictionless"];	
+                [params setValue:@"1" forKey:kFBDialogFrictionlessRequestsEnabledKey];	
                 //  3. request the frictionless recipient list encoded in the success url
-                [params setValue:@"1" forKey:@"get_frictionless_recipients"];
+                [params setValue:@"1" forKey:kFBDialogFrictionlessRecipientsKey];
             }
 
             // set invisible if all recipients are enabled for frictionless requests
-            id fbid = [params objectForKey:@"to"];
+            id fbid = [params objectForKey:kFBRecipientsInvisibleKey];
             if (fbid != nil) {
                 // if value parses as a json array expression get the list that way
                 SBJsonParser *parser = [[[SBJsonParser alloc] init] autorelease];
@@ -810,11 +804,13 @@ static void *finishedContext = @"finishedContext";
     _requestExtendingAccessToken = nil;
 }
 
+
+
 - (void)request:(FBRequest *)request didLoad:(id)result {
     _isExtendingAccessToken = NO;
     _requestExtendingAccessToken = nil;
-    NSString* accessToken = [result objectForKey:@"access_token"];
-    NSString* expTime = [result objectForKey:@"expires_at"];
+    NSString* accessToken = [result objectForKey:kFBOAuth2Key];
+    NSString* expTime = [result objectForKey:kFBOAuth2ExpiresKey];
     
     if (accessToken == nil || expTime == nil) {
         return;

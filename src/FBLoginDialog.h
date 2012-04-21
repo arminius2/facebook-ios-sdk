@@ -27,7 +27,7 @@
  */
 
 @interface FBLoginDialog : FBDialog {
-    id<FBLoginDialogDelegate> _loginDelegate;
+    __weak id<FBLoginDialogDelegate> _loginDelegate;
 }
 
 -(id) initWithURL:(NSString *) loginURL
@@ -38,8 +38,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 @protocol FBLoginDialogDelegate <NSObject>
-
-- (void)fbDialogLogin:(NSString*)token expirationDate:(NSDate*)expirationDate;
+@optional
+- (void)fbDialogLogin:(NSString *)token expirationDate:(NSDate *)expirationDate;
 
 - (void)fbDialogNotLogin:(BOOL)cancelled;
 

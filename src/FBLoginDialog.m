@@ -16,6 +16,7 @@
 
 #import "FBDialog.h"
 #import "FBLoginDialog.h"
+#import "Facebook.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,9 +47,9 @@
  */
 - (void) dialogDidSucceed:(NSURL*)url {
     NSString *q = [url absoluteString];
-    NSString *token = [self getStringFromUrl:q needle:@"access_token="];
-    NSString *expTime = [self getStringFromUrl:q needle:@"expires_in="];
-    NSDate *expirationDate =nil;
+    NSString *token = [self getStringFromUrl:q needle:[kFBOAuth2Key stringByAppendingString:@"="]];
+    NSString *expTime = [self getStringFromUrl:q needle:[kFBOAuthTokenExpiresInKey stringByAppendingString:@"="]];
+    NSDate *expirationDate = nil;
     
     if (expTime != nil) {
         int expVal = [expTime intValue];
@@ -82,7 +83,7 @@
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    if (!(([error.domain isEqualToString:@"NSURLErrorDomain"] && error.code == -999) ||
+    if (!(([error.domain isEqualToString:NSURLErrorDomain] && error.code == -999) || /*NOTE:  NSURLErrorDomain is a static const declared by the NSURL classes, and could be changed at any time, so it's best to use that since it's available.  WebKitErrorDomain is not available in iOS... so that's totally rad*/
           ([error.domain isEqualToString:@"WebKitErrorDomain"] && error.code == 102))) {
         [super webView:webView didFailLoadWithError:error];
         if ([_loginDelegate respondsToSelector:@selector(fbDialogNotLogin:)]) {

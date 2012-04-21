@@ -177,7 +177,7 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
  * Formulate the NSError
  */
 - (id)formError:(NSInteger)code userInfo:(NSDictionary *) errorData {
-    return [NSError errorWithDomain:@"facebookErrDomain" code:code userInfo:errorData];
+    return [NSError errorWithDomain:kFBErrorDomain code:code userInfo:errorData];
     
 }
 
@@ -196,7 +196,7 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
             *error = [self formError:kGeneralErrorCode
                             userInfo:[NSDictionary
                                       dictionaryWithObject:@"This operation can not be completed"
-                                      forKey:@"error_msg"]];
+                                      forKey:kFBJSONErrorMessageKey]];
         }
         return nil;
     }
@@ -211,7 +211,7 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
     }
 
     if ([result isKindOfClass:[NSDictionary class]]) {
-        if ([result objectForKey:@"error"] != nil) {
+        if ([result objectForKey:kFBJSONErrorKey] != nil) {
             if (error != nil) {
                 *error = [self formError:kGeneralErrorCode
                                 userInfo:result];
@@ -219,20 +219,20 @@ static const NSTimeInterval kTimeoutInterval = 180.0;
             return nil;
         }
         
-        if ([result objectForKey:@"error_code"] != nil) {
+        if ([result objectForKey:kFBJSONErrorCodeKey] != nil) {
             if (error != nil) {
-                *error = [self formError:[[result objectForKey:@"error_code"] intValue] userInfo:result];
+                *error = [self formError:[[result objectForKey:kFBJSONErrorCodeKey] intValue] userInfo:result];
             }
             return nil;
         }
         
-        if ([result objectForKey:@"error_msg"] != nil) {
+        if ([result objectForKey:kFBJSONErrorMessageKey] != nil) {
             if (error != nil) {
                 *error = [self formError:kGeneralErrorCode userInfo:result];
             }
         }
         
-        if ([result objectForKey:@"error_reason"] != nil) {
+        if ([result objectForKey:kFBJSONErrorReasonKey] != nil) {
             if (error != nil) {
                 *error = [self formError:kGeneralErrorCode userInfo:result];
             }
